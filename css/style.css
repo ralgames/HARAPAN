@@ -116,3 +116,9 @@ body {
 .mastfoot {
   color: rgba(0, 0, 0, .5);
 }
+
+.canvas_wrapper
+{
+  width:800px;
+	margin:0 auto;
+}

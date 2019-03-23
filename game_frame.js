@@ -70,7 +70,7 @@ function loadImage() {
     m_src_num++;
 
     m_next_image = new Image();
-    m_next_image.src = "./image/Next.png";
+    m_next_image.src = "./image/next.png";
     m_next_image.onload = function(e) { m_src_loaded+=1; }
     m_src_num++;
 }

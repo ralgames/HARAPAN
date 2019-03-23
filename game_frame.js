@@ -24,6 +24,8 @@ var ani = function(x, y) {
     this.x = x;
     this.y = y;
     this.harapan = false;
+    this.speed_x = 0;
+    this.speed_y = 0;
 }
 
 ani.prototype = {
@@ -35,18 +37,24 @@ ani.prototype = {
         return true;
     },
 
+    update : function() {
+        this.x += this.speed_x;
+        this.y += this.speed_y;
+    },
+
     teleport : function() {
         this.x = Math.random() * (780 - 43.7*2) + 10;
         this.y = Math.random() * (540 - 48.5*2) + 50;
+    },
 
+    play : function() {
         var r = Math.floor(Math.random() * m_brother_se.length);
         if(r > m_brother_se.length-1)
         {
             r = m_brother_se.length-1;
         }
         m_brother_se[r].play();
-    }
-    ,
+    },
 
     draw : function(ctx) {
         ctx.drawImage(m_brother_image, 0, 0, 437, 485, this.x, this.y, 43.7*2, 48.5*2);
@@ -181,7 +189,7 @@ function lodingDraw(ctx) {
 
 function titleInit() {
     score = 0;
-    bro.x = 150;
+    bro.x = 120;
     bro.y = 200;
 }
 
@@ -198,7 +206,7 @@ function titleDraw(ctx) {
     ctx.fillRect(0, 0, 800, 600);
     bro.draw(ctx);
 
-    drawPunch(ctx);
+
     ctx.fillStyle = 'rgb(0, 0, 0)';
     ctx.textAlign = 'center';
     ctx.font = "50px 'メイリオ'";
@@ -206,30 +214,80 @@ function titleDraw(ctx) {
 
     ctx.font = "30px 'メイリオ'";
     ctx.fillText("上の画像を腹パンしたらゲームスタート(音量注意)", 400, 500);
+
+    ctx.textAlign = 'left';
+    ctx.font = "15px 'メイリオ'";
+    ctx.fillText("← ＾～＾の手", m_mouse.x+5, m_mouse.y+30);
+
+    drawPunch(ctx);
 }
 
 // Main ----- ----- ----- ----- -----
 var time;
+var last;
+var bros = [];
 
 function mainInit() {
     //30秒
     time = 30*30;
     score = 0;
+    last = false;
     bro.teleport();
+    bro.play();
+
+    for(var i = 0; i < 4; i++)
+    {
+        bros[i] = new ani(0, 0);
+        bros[i].teleport();
+        if(Math.random() - 0.5 > 0) {
+            bros[i].x = -90;
+            bros[i].speed_x =  Math.random() + 1;
+        }
+        else {
+            bros[i].x = 805;
+            bros[i].speed_x = -Math.random() - 1;
+        }
+    }
 }
 
 function mainUpdate() {
     // Update
     time--;
+    if(time <= 10*30) {
+        for(var i = 0; i < 4; i++) {
+            bros[i].update();
+        }
+    }
+
     if(time <= 0) {
         time = 0;
         m_scene = 3;
     }
 
-    if(mouse_is_down() && bro.is_hit())
+    if(mouse_is_down())
     {
-        bro.teleport();
-        score++;
+        if(bro.is_hit())
+        {
+            bro.teleport();
+            bro.play();
+            score++;
+        }
+
+        for(var i = 0; i < 4; i++)
+        {
+            if(!bros[i].is_hit()) { continue; }
+            bros[i].teleport();
+            bro.play();
+            if(Math.random() - 0.5 > 0) {
+                bros[i].x = -90;
+                bros[i].speed_x =  Math.random() + 1;
+            }
+            else {
+                bros[i].x = 805;
+                bros[i].speed_x = -Math.random() - 1;
+            }
+            score++;
+        }
     }
 }
 
@@ -245,6 +303,9 @@ function mainDraw(ctx) {
     ctx.fillText("Time:" + Math.ceil(time/30) + "   Score:"+score, 400, 40);
 
     bro.draw(ctx);
+    for(var i = 0; i < 4; i++) {
+        bros[i].draw(ctx);
+    }
     drawPunch(ctx);
 }
 
@@ -262,7 +323,7 @@ function resultUpdate() {
 
 function resultDraw(ctx) {
     // Draw
-    ctx.fillStyle = 'rgba(100, 100, 255,0.6)';
+    ctx.fillStyle = 'rgba(100, 100, 255,0.2)';
     ctx.fillRect(10, 40, 790, 590);
 
     ctx.font = "50px 'メイリオ'";

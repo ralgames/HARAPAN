@@ -8,8 +8,7 @@
 .btn-secondary:focus {
   color: #fff;
   text-shadow: none; /* Prevent inheritance from `body` */
-  /*background-color: #4c4;*/
-  background-color: gray;
+  background-color: #4c4;
   border: .05rem solid #000;
 }
 

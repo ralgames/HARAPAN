@@ -212,8 +212,8 @@ function titleDraw(ctx) {
     ctx.font = "50px 'メイリオ'";
     ctx.fillText("↑こいつを腹パンしろ！", 400, 350);
 
-    ctx.font = "30px 'メイリオ'";
-    ctx.fillText("上の画像を腹パンしたらゲームスタート(音量注意)", 400, 500);
+    ctx.font = "25px 'メイリオ'";
+    ctx.fillText("上の画像を腹パン(左クリック)でゲームスタート(音量注意)", 400, 500);
 
     ctx.textAlign = 'left';
     ctx.font = "15px 'メイリオ'";
@@ -279,11 +279,11 @@ function mainUpdate() {
             bros[i].teleport();
             bro.play();
             if(Math.random() - 0.5 > 0) {
-                bros[i].x = -90;
+                bros[i].x = -110;
                 bros[i].speed_x =  Math.random() + 1;
             }
             else {
-                bros[i].x = 805;
+                bros[i].x = 825;
                 bros[i].speed_x = -Math.random() - 1;
             }
             score++;
@@ -324,7 +324,7 @@ function resultUpdate() {
 function resultDraw(ctx) {
     // Draw
     ctx.fillStyle = 'rgba(100, 100, 255,0.2)';
-    ctx.fillRect(10, 40, 790, 590);
+    ctx.fillRect(10, 50, 780, 540);
 
     ctx.font = "50px 'メイリオ'";
     ctx.textAlign = 'center';
